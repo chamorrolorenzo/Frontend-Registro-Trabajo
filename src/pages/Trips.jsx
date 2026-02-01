@@ -1,82 +1,61 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import api from "../api/api";
 
 function Trips() {
+  const today = new Date().toISOString().split("T")[0];
+
   const [remito, setRemito] = useState("");
   const [cubicMeters, setCubicMeters] = useState("");
-  const [trips, setTrips] = useState([]);
-  const [message, setMessage] = useState("");
+  const [date, setDate] = useState(today);
+  const [loading, setLoading] = useState(false);
 
-  // Traer viajes al cargar
-  useEffect(() => {
-    fetchTrips();
-  }, []);
+  const handleSubmit = async () => {
+    if (!remito || !cubicMeters || !date) return;
 
-  const fetchTrips = async () => {
-    try {
-      const res = await api.get("/trips");
-      setTrips(res.data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
+    setLoading(true);
     try {
       await api.post("/trips", {
         remito,
         cubicMeters: Number(cubicMeters),
-        date: new Date(),
+        date,
       });
 
       setRemito("");
       setCubicMeters("");
-      setMessage("Viaje guardado correctamente");
-      fetchTrips();
-    } catch (error) {
-      setMessage("Error al guardar viaje");
+      setDate(today);
+      alert("Viaje guardado");
+    } catch {
+      alert("Error al guardar viaje");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div>
-      <h1>Viajes</h1>
+    <div className="page">
+      <h1>Agregar viaje</h1>
 
-      <h2>Agregar viaje</h2>
+      <label>Remito</label>
+      <input value={remito} onChange={(e) => setRemito(e.target.value)} />
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Remito"
-          value={remito}
-          onChange={(e) => setRemito(e.target.value)}
-          required
-        />
+      <label>Metros cúbicos (m³)</label>
+      <input
+        type="number"
+        value={cubicMeters}
+        onChange={(e) => setCubicMeters(e.target.value)}
+      />
 
-        <input
-          type="number"
-          placeholder="m³"
-          value={cubicMeters}
-          onChange={(e) => setCubicMeters(e.target.value)}
-          required
-        />
+      <label>Fecha del viaje</label>
+      <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
 
-        <button type="submit">Guardar viaje</button>
-      </form>
+      <button onClick={handleSubmit} disabled={loading}>
+        {loading ? "Guardando..." : "Guardar viaje"}
+      </button>
 
-      {message && <p>{message}</p>}
-
-      <h2>Mis viajes</h2>
-
-      <ul>
-        {trips.map((trip) => (
-          <li key={trip._id}>
-            {trip.remito} – {trip.cubicMeters} m³
-          </li>
-        ))}
-      </ul>
+      <Link to="/trips/history" className="secondary-link">
+        Ver mis viajes →
+      </Link>
     </div>
   );
 }

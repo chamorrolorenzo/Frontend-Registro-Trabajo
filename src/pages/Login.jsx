@@ -1,48 +1,67 @@
 import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import api from "../api/api";
-import { useNavigate } from "react-router-dom";
+import "../styles/auth.css";
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null);
 
     try {
-      const res = await api.post("/auth/login", {
+      const data = await api.post("/auth/login", {
         username,
         password,
       });
 
-      localStorage.setItem("token", res.data.token);
-      navigate("/dashboard");
-    } catch (error) {
-      alert("Credenciales incorrectas");
+      // 🔑 ÚNICA fuente de verdad
+      localStorage.setItem("token", data.token);
+
+      // 👉 HOME REAL
+      navigate("/summary", { replace: true });
+    } catch (err) {
+      setError("Invalid credentials");
     }
   };
 
   return (
-    <div>
-      <h1>Login</h1>
+    <div className="auth-page">
+      <div className="auth-card">
+        <h1>Welcome back</h1>
+        <p className="auth-subtitle">Log in to your account</p>
 
-      <form onSubmit={handleSubmit}>
-        <input
-          placeholder="Usuario"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
+        <form className="auth-form" onSubmit={handleSubmit}>
+          <input
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
 
-        <input
-          type="password"
-          placeholder="Contraseña"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
 
-        <button type="submit">Ingresar</button>
-      </form>
+          <button type="submit">Log in</button>
+        </form>
+
+        {error && <p className="auth-error">{error}</p>}
+
+        <p className="auth-footer">
+          Don't have an account?{" "}
+          <Link to="/register">Sign up</Link>
+        </p>
+      </div>
     </div>
   );
 }

@@ -1,0 +1,139 @@
+/* ===== RESET ===== */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: radial-gradient(
+    circle at top left,
+    #1f2937,
+    #020617 60%
+  );
+  color: #e5e7eb;
+}
+
+/* ===== LINKS ===== */
+a {
+  color: #93c5fd;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+a:hover {
+  color: #bfdbfe;
+}
+
+/* ===== TITLES ===== */
+h1 {
+  font-size: 2.2rem;
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+
+h2 {
+  font-size: 1.4rem;
+  margin-top: 32px;
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+
+/* ===== INPUTS ===== */
+input,
+select {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 14px 16px;
+  font-size: 0.95rem;
+  color: #f9fafb;
+  outline: none;
+}
+
+input::placeholder {
+  color: #9ca3af;
+}
+
+input:focus,
+select:focus {
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.25);
+}
+
+/* ===== BUTTONS ===== */
+button {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: white;
+  border: none;
+  border-radius: 999px;
+  padding: 12px 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 30px rgba(37, 99, 235, 0.45);
+}
+
+/* ================================================= */
+/* ================== TRIPS ======================== */
+/* ================================================= */
+
+.trips-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Card limitada a mobile (máx 480px) */
+.trip-card {
+  max-width: 480px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* UNA SOLA LÍNEA */
+.trip-row {
+  display: grid;
+  grid-template-columns: 90px 1fr 70px 90px;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+/* Corte elegante si algo es largo */
+.trip-row span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Detalles visuales */
+.trip-date {
+  opacity: 0.75;
+  font-size: 0.85rem;
+}
+
+.trip-remito {
+  font-weight: 500;
+}
+
+.trip-meters {
+  text-align: right;
+  opacity: 0.9;
+}
+
+.trip-amount {
+  text-align: right;
+  font-weight: 600;
+  color: #6ea8ff;
+}

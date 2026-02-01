@@ -1,16 +1,56 @@
-import axios from "axios";
+const BASE_URL = "http://localhost:3002";
 
-const api = axios.create({
-  baseURL: "http://localhost:3002",
-});
-
-// 👉 agrega el token si existe
-api.interceptors.request.use((config) => {
+async function request(endpoint, options = {}) {
   const token = localStorage.getItem("token");
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      ...(token && { Authorization: `Bearer ${token}` }),
+    },
+    ...options,
+  };
+
+  const response = await fetch(`${BASE_URL}${endpoint}`, config);
+
+  if (response.status === 401) {
+    localStorage.removeItem("token");
+    window.location.href = "/login";
+    throw new Error("Unauthorized");
   }
-  return config;
-});
+
+  if (!response.ok) {
+    let error;
+    try {
+      error = await response.json();
+    } catch {
+      error = { message: "Request failed" };
+    }
+    throw error;
+  }
+
+  return response.json();
+}
+
+const api = {
+  get: (endpoint) => request(endpoint),
+
+  post: (endpoint, body) =>
+    request(endpoint, {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
+
+  put: (endpoint, body) =>
+    request(endpoint, {
+      method: "PUT",
+      body: JSON.stringify(body),
+    }),
+
+  delete: (endpoint) =>
+    request(endpoint, {
+      method: "DELETE",
+    }),
+};
 
 export default api;

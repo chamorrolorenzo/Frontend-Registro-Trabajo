@@ -1,51 +1,109 @@
 import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import api from "../api/api";
-import { useNavigate } from "react-router-dom";
+import "../styles/auth.css";
 
 function Register() {
-  const [form, setForm] = useState({
-    nombre: "",
-    apellido: "",
-    username: "",
-    email: "",
-    password: "",
-  });
+  const [nombre, setNombre] = useState("");
+  const [apellido, setApellido] = useState("");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [companyCode, setCompanyCode] = useState("");
+
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null);
+    setLoading(true);
 
     try {
-      await api.post("/auth/register", form);
+      await api.post("/auth/register", {
+        nombre,
+        apellido,
+        username,
+        email,
+        password,
+        companyCode,
+      });
+
       navigate("/login");
-    } catch (error) {
-      alert("Error en el registro");
+    } catch (err) {
+      setError("No se pudo crear la cuenta. Verificá los datos.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div>
-      <h1>Registro</h1>
+    <div className="auth-page">
+      <div className="auth-card">
+        <h1>Crear cuenta</h1>
+        <p className="auth-subtitle">
+          Registrate para comenzar a usar el sistema
+        </p>
 
-      <form onSubmit={handleSubmit}>
-        <input name="nombre" placeholder="Nombre" onChange={handleChange} />
-        <input name="apellido" placeholder="Apellido" onChange={handleChange} />
-        <input name="username" placeholder="Usuario" onChange={handleChange} />
-        <input name="email" placeholder="Email" onChange={handleChange} />
-        <input
-          type="password"
-          name="password"
-          placeholder="Contraseña"
-          onChange={handleChange}
-        />
+        <form className="auth-form" onSubmit={handleSubmit}>
+          <input
+            placeholder="Nombre"
+            value={nombre}
+            onChange={(e) => setNombre(e.target.value)}
+            required
+          />
 
-        <button type="submit">Registrarse</button>
-      </form>
+          <input
+            placeholder="Apellido"
+            value={apellido}
+            onChange={(e) => setApellido(e.target.value)}
+            required
+          />
+
+          <input
+            placeholder="Usuario"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+
+          <input
+            type="password"
+            placeholder="Contraseña"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+
+          <input
+            placeholder="Código de empresa"
+            value={companyCode}
+            onChange={(e) => setCompanyCode(e.target.value)}
+            required
+          />
+
+          <button type="submit" disabled={loading}>
+            {loading ? "Creando cuenta..." : "Crear cuenta"}
+          </button>
+        </form>
+
+        {error && <p className="auth-error">{error}</p>}
+
+        <p className="auth-footer">
+          ¿Ya tenés cuenta?{" "}
+          <Link to="/login">Iniciar sesión</Link>
+        </p>
+      </div>
     </div>
   );
 }

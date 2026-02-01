@@ -1,0 +1,125 @@
+/* ===== Page ===== */
+.auth-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(1200px circle at 15% 10%, #1f2937, transparent 40%),
+    radial-gradient(1200px circle at 85% 90%, #020617, transparent 40%),
+    #020617;
+}
+
+/* ===== Card ===== */
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+  padding: 2.75rem 2.5rem;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(18px);
+  box-shadow:
+    0 30px 80px rgba(0, 0, 0, 0.6),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  animation: authFade 0.5s ease-out;
+}
+
+/* ===== Header ===== */
+.auth-card h1 {
+  margin: 0 0 0.25rem;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #f9fafb;
+}
+
+.auth-subtitle {
+  margin-bottom: 2rem;
+  font-size: 0.95rem;
+  color: #9ca3af;
+}
+
+/* ===== Form ===== */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* ===== Inputs ===== */
+.auth-form input {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  border-radius: 12px;
+  border: none;
+  background: rgba(255, 255, 255, 0.08);
+  color: #f9fafb;
+  font-size: 0.95rem;
+  outline: none;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.auth-form input::placeholder {
+  color: #9ca3af;
+}
+
+.auth-form input:focus {
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.6);
+}
+
+/* ===== Button ===== */
+.auth-form button {
+  margin-top: 0.5rem;
+  padding: 0.9rem;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.auth-form button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 30px rgba(79, 70, 229, 0.45);
+}
+
+.auth-form button:active {
+  transform: translateY(0);
+}
+
+/* ===== Footer ===== */
+.auth-footer {
+  margin-top: 1.75rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #9ca3af;
+}
+
+.auth-footer a {
+  color: #a5b4fc;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.auth-footer a:hover {
+  text-decoration: underline;
+}
+
+/* ===== Error ===== */
+.auth-error {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 0.85rem;
+  color: #fca5a5;
+}
+
+/* ===== Animation ===== */
+@keyframes authShake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  50% { transform: translateX(4px); }
+  75% { transform: translateX(-4px); }
+  100% { transform: translateX(0); }
+}
