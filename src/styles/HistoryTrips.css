@@ -1,0 +1,38 @@
+.trips-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* una sola línea, entra TODO */
+.trip-row {
+  display: grid;
+  grid-template-columns: 1.1fr 1.4fr 0.8fr 0.9fr;
+
+  gap: 5px;
+}
+
+.trip-date {
+  font-size: 0.75rem;
+  opacity: 0.75;
+  white-space: nowrap;
+  gap: 10px;
+}
+
+.trip-remito {
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-left: 50px;
+}
+
+.trip-meters {
+  font-size: 0.85rem;
+  text-align: right;
+}
+
+.trip-amount {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-align: right;
+  color: #60a5fa;
+}

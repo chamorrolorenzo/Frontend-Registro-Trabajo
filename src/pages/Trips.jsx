@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../api/api";
+import "../styles/trips.css";
+
 
 function Trips() {
   const today = new Date().toISOString().split("T")[0];
@@ -46,16 +48,15 @@ function Trips() {
         onChange={(e) => setCubicMeters(e.target.value)}
       />
 
-      <label>Fecha del viaje</label>
-      <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+      
+     <div className="trip-actions">
+  <button onClick={handleSubmit}>Guardar viaje</button>
 
-      <button onClick={handleSubmit} disabled={loading}>
-        {loading ? "Guardando..." : "Guardar viaje"}
-      </button>
+  <Link to="/trips/history" className="secondary-link">
+    Ver mis viajes →
+  </Link>
+</div>
 
-      <Link to="/trips/history" className="secondary-link">
-        Ver mis viajes →
-      </Link>
     </div>
   );
 }

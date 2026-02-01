@@ -1,0 +1,18 @@
+.hours-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.hours-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.hours-feedback {
+  text-align: center;
+  font-size: 0.85rem;
+  opacity: 0.85;
+}

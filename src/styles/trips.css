@@ -1,0 +1,70 @@
+/* ============================= */
+/* ========= TRIPS ============= */
+/* ============================= */
+
+/* Página limitada a 480px */
+.page {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Labels */
+.page label {
+  font-size: 0.85rem;
+  opacity: 0.85;
+}
+
+/* ===== FORM ===== */
+
+.trip-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Inputs ya están estilados globalmente */
+
+/* ===== ACTIONS ===== */
+
+.trip-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+/* Botón principal */
+.trip-actions button {
+  width: 100%;
+}
+
+/* Link secundario */
+.secondary-link {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #93c5fd;
+}
+
+.secondary-link:hover {
+  color: #bfdbfe;
+}
+
+/* ===== FEEDBACK ===== */
+
+.trip-feedback {
+  font-size: 0.85rem;
+  text-align: center;
+  opacity: 0.85;
+}
+
+/* Estado loading */
+.trip-actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}

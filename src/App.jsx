@@ -8,6 +8,7 @@ import Trips from "./pages/Trips";
 import HistoryTrips from "./pages/HistoryTrips";
 import Summary from "./pages/Summary";
 import Navbar from "./components/Navbar";
+import HistoryHours from "./pages/HistoryHours";
 
 import "./styles/global.css";
 
@@ -73,6 +74,17 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/hours/history"
+          element={
+            <ProtectedRoute>
+              <PrivateLayout>
+                <HistoryHours />
+              </PrivateLayout>
+            </ProtectedRoute>
+          }
+        />
+
       </Routes>
     </BrowserRouter>
   );

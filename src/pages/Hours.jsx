@@ -1,54 +1,63 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import api from "../api/api";
+import "../styles/Hours.css";
+
+// util: fecha de hoy en formato YYYY-MM-DD
+const todayISO = () => {
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+};
+
+// util: calcula horas entre ingreso y egreso
+const calculateHours = (start, end) => {
+  if (!start || !end) return null;
+
+  const [sh, sm] = start.split(":").map(Number);
+  const [eh, em] = end.split(":").map(Number);
+
+  const startMinutes = sh * 60 + sm;
+  const endMinutes = eh * 60 + em;
+
+  if (endMinutes <= startMinutes) return null;
+
+  const diff = endMinutes - startMinutes;
+  return Number((diff / 60).toFixed(2));
+};
 
 function Hours() {
-  const [hoursList, setHoursList] = useState([]);
-  const [checkIn, setCheckIn] = useState("");
-  const [checkOut, setCheckOut] = useState("");
+  const [date] = useState(todayISO());
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
   const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState(null);
 
-  const fetchHours = async () => {
-    try {
-      const data = await api.get("/hours");
-      setHoursList(data);
-    } catch (error) {
-      console.error("Error fetching hours", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchHours();
-  }, []);
-
-  const calculateHours = () => {
-    if (!checkIn || !checkOut) return 0;
-
-    const start = new Date(`1970-01-01T${checkIn}`);
-    const end = new Date(`1970-01-01T${checkOut}`);
-
-    const diffMs = end - start;
-    if (diffMs <= 0) return 0;
-
-    return +(diffMs / (1000 * 60 * 60)).toFixed(2);
-  };
-
-  const totalHours = calculateHours();
+  const totalHours = calculateHours(startTime, endTime);
 
   const handleSubmit = async () => {
-    if (totalHours <= 0) return;
+    if (!totalHours) {
+      setMessage("Horario inválido");
+      return;
+    }
 
     setLoading(true);
+    setMessage(null);
+
     try {
       await api.post("/hours", {
-        date: new Date(),
+        date,
         hours: totalHours,
       });
 
-      setCheckIn("");
-      setCheckOut("");
-      fetchHours();
+      setStartTime("");
+      setEndTime("");
+      setMessage("Horas guardadas correctamente");
     } catch (error) {
-      alert("Error al guardar horas");
+      console.error(error);
+      setMessage("Error al guardar horas");
     } finally {
       setLoading(false);
     }
@@ -56,62 +65,44 @@ function Hours() {
 
   return (
     <div className="page">
-      <h1>Horas trabajadas</h1>
+      <h1>Cargar horas</h1>
 
-      {/* CARGA */}
-      <div className="hours-box">
+      <div className="hours-form">
+        <label>Fecha</label>
+        <input type="date" value={date} disabled />
+
         <label>Hora de ingreso</label>
         <input
           type="time"
-          value={checkIn}
-          onChange={(e) => setCheckIn(e.target.value)}
+          value={startTime}
+          onChange={(e) => setStartTime(e.target.value)}
         />
 
         <label>Hora de egreso</label>
         <input
           type="time"
-          value={checkOut}
-          onChange={(e) => setCheckOut(e.target.value)}
+          value={endTime}
+          onChange={(e) => setEndTime(e.target.value)}
         />
+      </div>
 
-        {totalHours > 0 && (
-          <p className="hours-preview">
-            Total: <strong>{totalHours} hs</strong>
-          </p>
-        )}
+      {totalHours && (
+        <p className="hours-preview">
+          Total: <strong>{totalHours} hs</strong>
+        </p>
+      )}
 
-        <button onClick={handleSubmit} disabled={loading || totalHours === 0}>
-          {loading ? "Guardando..." : "Guardar jornada"}
+      <div className="hours-actions">
+        <button onClick={handleSubmit} disabled={loading}>
+          {loading ? "Guardando..." : "Guardar horas"}
         </button>
+
+        <Link to="/hours/history" className="secondary-link">
+          Ver mis horas →
+        </Link>
       </div>
 
-      {/* LISTADO */}
-      <h2>Mis horas</h2>
-
-      <div className="hours-list">
-        {hoursList.length === 0 && (
-          <p className="empty-text">Todavía no cargaste horas</p>
-        )}
-
-        {hoursList.map((h) => (
-          <div className="hour-card" key={h._id}>
-            <div>
-              <div className="hour-date">
-                {new Date(h.date).toLocaleDateString()}
-              </div>
-              <div className="hour-detail">
-                {h.hours} hs
-                {h.extraHours > 0 && (
-                  <span className="extra">
-                    {" "}
-                    + {h.extraHours} extra
-                  </span>
-                )}
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
+      {message && <p className="hours-feedback">{message}</p>}
     </div>
   );
 }

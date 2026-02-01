@@ -1,20 +1,68 @@
-/* ===== RESET ===== */
+/* ================================= */
+/* ========== RESET BASE ============ */
+/* ================================= */
+
 * {
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
+html,
 body {
   margin: 0;
-  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  padding: 0;
+  width: 100%;
   background: radial-gradient(
     circle at top left,
     #1f2937,
     #020617 60%
   );
   color: #e5e7eb;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
 }
 
-/* ===== LINKS ===== */
+/* ================================= */
+/* ======== MOBILE CONTAINER ======== */
+/* ================================= */
+
+/* TODA la app vive dentro de 480px */
+.page {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ================================= */
+/* ============ TEXT ================ */
+/* ================================= */
+
+h1 {
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin: 0 0 8px;
+}
+
+h2 {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin: 16px 0 8px;
+}
+
+p {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+/* ================================= */
+/* ============ LINKS =============== */
+/* ================================= */
+
 a {
   color: #93c5fd;
   text-decoration: none;
@@ -25,21 +73,10 @@ a:hover {
   color: #bfdbfe;
 }
 
-/* ===== TITLES ===== */
-h1 {
-  font-size: 2.2rem;
-  font-weight: 600;
-  margin-bottom: 24px;
-}
+/* ================================= */
+/* ============ INPUTS ============== */
+/* ================================= */
 
-h2 {
-  font-size: 1.4rem;
-  margin-top: 32px;
-  margin-bottom: 16px;
-  font-weight: 500;
-}
-
-/* ===== INPUTS ===== */
 input,
 select {
   width: 100%;
@@ -62,8 +99,12 @@ select:focus {
   box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.25);
 }
 
-/* ===== BUTTONS ===== */
+/* ================================= */
+/* ============ BUTTONS ============= */
+/* ================================= */
+
 button {
+  width: 100%;
   background: linear-gradient(135deg, #3b82f6, #2563eb);
   color: white;
   border: none;
@@ -80,60 +121,41 @@ button:hover {
   box-shadow: 0 12px 30px rgba(37, 99, 235, 0.45);
 }
 
-/* ================================================= */
-/* ================== TRIPS ======================== */
-/* ================================================= */
-
-.trips-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
 }
 
-/* Card limitada a mobile (máx 480px) */
-.trip-card {
-  max-width: 480px;
+/* ================================= */
+/* ============ NAVBAR ============== */
+/* ================================= */
+
+nav {
   width: 100%;
+  max-width: 480px;
   margin: 0 auto;
-  padding: 12px 14px;
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-/* UNA SOLA LÍNEA */
-.trip-row {
-  display: grid;
-  grid-template-columns: 90px 1fr 70px 90px;
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 8px;
-  font-size: 0.9rem;
-  white-space: nowrap;
+  gap: 12px;
 }
 
-/* Corte elegante si algo es largo */
-.trip-row span {
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+/* ================================= */
+/* ============ HELPERS ============= */
+/* ================================= */
 
-/* Detalles visuales */
-.trip-date {
-  opacity: 0.75;
+.empty-text {
   font-size: 0.85rem;
+  opacity: 0.75;
+  text-align: center;
+  margin-top: 8px;
 }
 
-.trip-remito {
-  font-weight: 500;
-}
-
-.trip-meters {
-  text-align: right;
-  opacity: 0.9;
-}
-
-.trip-amount {
-  text-align: right;
-  font-weight: 600;
-  color: #6ea8ff;
+.divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  margin: 16px 0;
 }
