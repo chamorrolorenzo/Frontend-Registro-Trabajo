@@ -1,32 +1,52 @@
+.page {
+  padding: 24px;
+}
+
 .hours-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
+  margin-top: 20px;
 }
 
 .hour-card {
-  max-width: 480px;
-  margin: 0 auto;
-  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.04);
   border-radius: 14px;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.06);
+  padding: 14px 18px;
 }
 
 .hour-row {
   display: grid;
-  grid-template-columns: 90px 1fr 1fr;
+  grid-template-columns: 110px 180px 80px 80px;
   align-items: center;
-  font-size: 0.9rem;
+  gap: 16px;
+}
+
+.hour-date {
+  opacity: 0.9;
+  font-size: 14px;
+}
+
+.hour-time {
+  opacity: 0.85;
+  font-size: 14px;
+  white-space: nowrap; /* 🔥 ESTA ES LA CLAVE */
+}
+
+.hour-total {
+  text-align: right;
+  font-weight: 500;
+  font-size: 14px;
 }
 
 .hour-extra {
   text-align: right;
-  font-weight: 600;
-  color: #fbbf24;
+  font-weight: 500;
+  font-size: 14px;
+  color: #ffd54f;
 }
-.trip-date {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+
+.empty-text {
+  opacity: 0.7;
+  margin-top: 20px;
 }

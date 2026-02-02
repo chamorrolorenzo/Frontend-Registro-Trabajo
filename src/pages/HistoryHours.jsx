@@ -10,6 +10,13 @@ const formatDate = (iso) =>
     year: "numeric",
   });
 
+const formatTime = (iso) =>
+  new Date(iso).toLocaleTimeString("es-AR", {
+    timeZone: "America/Argentina/Buenos_Aires",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
 function HistoryHours() {
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -17,10 +24,11 @@ function HistoryHours() {
   useEffect(() => {
     const fetchHours = async () => {
       try {
+        // 👈 mismo patrón que HistoryTrips
         const data = await api.get("/hours");
         setRecords(data);
-      } catch (err) {
-        console.error(err);
+      } catch (error) {
+        console.error("Error fetching hours", error);
       } finally {
         setLoading(false);
       }
@@ -33,30 +41,40 @@ function HistoryHours() {
     <div className="page">
       <h1>Mis horas</h1>
 
-      {loading && <p className="empty-text">Cargando…</p>}
+      {loading && <p className="empty-text">Cargando horas…</p>}
 
       {!loading && records.length === 0 && (
         <p className="empty-text">No hay horas cargadas</p>
       )}
 
       <div className="hours-list">
-        {records.map((h) => (
-          <div className="hour-card" key={h._id}>
-            <div className="hour-row">
-              <span className="hour-date">
-                {formatDate(h.date)}
-              </span>
+        {records.map((h) => {
+          const totalHours = h.totalMinutes / 60;
+          const extraHours = totalHours > 8 ? totalHours - 8 : 0;
 
-              <span className="hour-total">
-                {h.hours} hs
-              </span>
+          return (
+            <div className="hour-card" key={h._id}>
+              <div className="hour-row">
+                <span className="hour-date">
+                  {formatDate(h.date)}
+                </span>
 
-              <span className="hour-extra">
-                {h.extraHours > 0 ? `+${h.extraHours} hs` : ""}
-              </span>
+                <span className="hour-time">
+                  {formatTime(h.entryTime)} –{" "}
+                  {h.exitTime ? formatTime(h.exitTime) : "—"}
+                </span>
+
+                <span className="hour-total">
+                  {totalHours.toFixed(2)} hs
+                </span>
+
+                <span className="hour-extra">
+                  +{extraHours.toFixed(2)} hs
+                </span>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

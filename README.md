@@ -131,3 +131,19 @@ frontend/
  ├─ context/
  ├─ api/
  └─ styles/
+
+## 🚀 Roadmap & Scalability
+
+This project is built with **multi-company support** and **scalability** in mind.
+
+**Planned improvements:**
+- **Company Admin Panel**: manage employees, hours, and trips per company
+- **Company Configuration**: customizable payment rules and pricing
+- **Monthly Summary**: dynamic calculations based on company logic
+- **Monthly Closure (optional)**: lock closed periods for read-only access
+
+**Design principles:**
+- Multi-company architecture
+- Role-based access control
+- Business logic centralized at the company level
+- Dynamic monthly calculations without data resets
