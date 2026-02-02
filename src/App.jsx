@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import ProtectedRoute from "./routes/ProtectedRoute";
 
 import Login from "./pages/Login";
@@ -7,9 +7,9 @@ import Hours from "./pages/Hours";
 import Trips from "./pages/Trips";
 import HistoryTrips from "./pages/HistoryTrips";
 import Summary from "./pages/Summary";
-import Navbar from "./components/Navbar";
 import HistoryHours from "./pages/HistoryHours";
 
+import Navbar from "./components/Navbar";
 import "./styles/global.css";
 
 // Layout privado (navbar + contenido)
@@ -26,6 +26,10 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+
+        {/* ===== REDIRECCIÓN INICIAL ===== */}
+        <Route path="/" element={<Navigate to="/login" replace />} />
+
         {/* ===== RUTAS PÚBLICAS ===== */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
@@ -37,6 +41,17 @@ function App() {
             <ProtectedRoute>
               <PrivateLayout>
                 <Hours />
+              </PrivateLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/hours/history"
+          element={
+            <ProtectedRoute>
+              <PrivateLayout>
+                <HistoryHours />
               </PrivateLayout>
             </ProtectedRoute>
           }
@@ -74,16 +89,9 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route
-          path="/hours/history"
-          element={
-            <ProtectedRoute>
-              <PrivateLayout>
-                <HistoryHours />
-              </PrivateLayout>
-            </ProtectedRoute>
-          }
-        />
+
+        {/* ===== FALLBACK ===== */}
+        <Route path="*" element={<Navigate to="/login" replace />} />
 
       </Routes>
     </BrowserRouter>

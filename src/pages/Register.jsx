@@ -22,15 +22,14 @@ function Register() {
     setLoading(true);
 
     try {
-      await api.post("/auth/register", {
-        nombre,
-        apellido,
-        username,
-        email,
-        password,
-        companyCode,
-      });
-
+  await api.post("/auth/register", {
+    nombre,
+    apellido,
+    username,
+    email,
+    password,
+    empresa: companyCode,
+  });
       navigate("/login");
     } catch (err) {
       setError("No se pudo crear la cuenta. Verificá los datos.");
