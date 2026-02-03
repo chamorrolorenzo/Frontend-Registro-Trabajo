@@ -76,7 +76,7 @@ function HistoryTrips() {
               </span>
 
               <span className="trip-remito">
-                Remito {trip.remito}
+                 {trip.remito}
               </span>
 
               <span className="trip-meters">
