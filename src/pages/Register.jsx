@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import api from "../api/api";
+import AuthFooter from "../components/AuthFooter";
+
 import "../styles/auth.css";
 
 function Register() {
@@ -22,17 +24,18 @@ function Register() {
     setLoading(true);
 
     try {
-  await api.post("/auth/register", {
-    nombre,
-    apellido,
-    username,
-    email,
-    password,
-    empresa: companyCode,
-  });
+      await api.post("/auth/register", {
+        nombre,
+        apellido,
+        username,
+        email,
+        password,
+        empresa: companyCode,
+      });
+
       navigate("/login");
     } catch (err) {
-      setError("No se pudo crear la cuenta. Verificá los datos.");
+      setError("Could not create account. Please check the data.");
     } finally {
       setLoading(false);
     }
@@ -41,28 +44,28 @@ function Register() {
   return (
     <div className="auth-page">
       <div className="auth-card">
-        <h1>Crear cuenta</h1>
+        <h1>Create account</h1>
         <p className="auth-subtitle">
-          Registrate para comenzar a usar el sistema
+          Register to start using the system
         </p>
 
         <form className="auth-form" onSubmit={handleSubmit}>
           <input
-            placeholder="Nombre"
+            placeholder="First name"
             value={nombre}
             onChange={(e) => setNombre(e.target.value)}
             required
           />
 
           <input
-            placeholder="Apellido"
+            placeholder="Last name"
             value={apellido}
             onChange={(e) => setApellido(e.target.value)}
             required
           />
 
           <input
-            placeholder="Usuario"
+            placeholder="Username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
@@ -78,31 +81,34 @@ function Register() {
 
           <input
             type="password"
-            placeholder="Contraseña"
+            placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
 
           <input
-            placeholder="Código de empresa"
+            placeholder="Company code"
             value={companyCode}
             onChange={(e) => setCompanyCode(e.target.value)}
             required
           />
 
           <button type="submit" disabled={loading}>
-            {loading ? "Creando cuenta..." : "Crear cuenta"}
+            {loading ? "Creating account..." : "Create account"}
           </button>
         </form>
 
         {error && <p className="auth-error">{error}</p>}
 
         <p className="auth-footer">
-          ¿Ya tenés cuenta?{" "}
-          <Link to="/login">Iniciar sesión</Link>
+          Already have an account?{" "}
+          <Link to="/login">Log in</Link>
         </p>
       </div>
+
+      {/* 👇 FOOTER INSTITUCIONAL */}
+      <AuthFooter />
     </div>
   );
 }

@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import api from "../api/api";
+import AuthFooter from "../components/AuthFooter";
+
 import "../styles/auth.css";
 
 function Login() {
@@ -62,6 +64,9 @@ function Login() {
           <Link to="/register">Sign up</Link>
         </p>
       </div>
+
+      {/* 👇 FOOTER INSTITUCIONAL */}
+      <AuthFooter />
     </div>
   );
 }
