@@ -1,104 +1,79 @@
-/* ===== CONTENEDOR ===== */
 .summary-page {
   max-width: 900px;
   margin: 40px auto;
   padding: 0 20px;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  color: #1f2937;
+  font-family: system-ui;
 }
 
-.summary-page h1 {
-  font-size: 2rem;
-  font-weight: 600;
-  margin-bottom: 24px;
-}
+/* HEADER */
 
-/* ===== FILTROS ===== */
-.summary-filters {
+.summary-header {
   display: flex;
+  align-items: center;
   gap: 12px;
   margin-bottom: 20px;
 }
 
-.summary-filters select {
-  padding: 8px 12px;
-  border-radius: 8px;
+.summary-header h1 {
+  margin: 0;
+  font-size: 28px;
+  color: #8cd5ff;
+}
+
+.summary-period {
+  width: 120px;
+  height: 34px;
+  padding: 4px 8px;
+  border-radius: 6px;
   border: 1px solid #d1d5db;
-  font-size: 0.9rem;
-  background: #fff;
+  background: white;
+  font-size: 14px;
+  color: #111827;
 }
 
-/* ===== CARD ===== */
-.summary-card {
-  background: #ffffff;
-  border-radius: 16px;
-  padding: 32px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+/* LIQUIDACION */
+
+.liquidation {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
 }
 
-/* ===== ESTADOS ===== */
-.summary-loading {
-  text-align: center;
-  color: #6b7280;
-}
-
-.summary-error {
-  text-align: center;
-  color: #dc2626;
-}
-
-/* ===== EMPTY ===== */
-.summary-empty {
-  text-align: center;
-  padding: 40px 20px;
-}
-
-.summary-empty p {
-  font-size: 1.1rem;
-  color: #6b7280;
+.block {
   margin-bottom: 24px;
 }
 
-/* ===== BOTÓN ===== */
-.primary-btn {
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
-  color: white;
-  border: none;
-  border-radius: 999px;
-  padding: 12px 28px;
-  font-size: 0.95rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.primary-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);
-}
-
-/* ===== MÉTRICAS ===== */
-.summary-metrics {
+.head,
+.values {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 20px;
+  grid-template-columns: 1fr 1fr 1fr;
 }
 
-.metric {
-  background: #f9fafb;
-  border-radius: 12px;
-  padding: 20px;
-  text-align: center;
+.head span {
+  font-size: 16px;
+  color:black;
 }
 
-.metric-label {
-  font-size: 0.85rem;
-  color: #6b7280;
-  margin-bottom: 6px;
+.values span {
+  font-size: 15px;
+  margin-top: 6px;
+   font-size: 16px;
+  color:black;
+   font-weight: 700;
 }
 
-.metric-value {
-  font-size: 1.6rem;
-  font-weight: 600;
-  color: #111827;
+.values span:last-child,
+.head span:last-child {
+  text-align: right;
+}
+
+.total-line {
+  text-align: right;
+  font-size: 18px;
+  font-weight: 700;
+  padding-top: 10px;
+  border-top: 1px solid #e5e7eb;
+   font-size: 16px;
+  color:black;
 }
