@@ -5,8 +5,8 @@ export default function Help() {
 
       <p>
         Bienvenido/a a <b>Registro-Trabajo</b>.  
-        Esta aplicación sirve para registrar viajes, metros trabajados y llevar
-        control básico de la actividad diaria.
+        Esta aplicación sirve para registrar viajes, metros cubicos transportados y llevar
+        control de la actividad diaria.
       </p>
 
       <hr />
@@ -27,11 +27,9 @@ export default function Help() {
         <li>Tocá “Nuevo viaje”.</li>
         <li>Completá:</li>
         <ul>
-          <li>Fecha</li>
-          <li>Origen</li>
-          <li>Destino</li>
+          <li>remito</li>
           <li>Metros</li>
-          <li>Observaciones (opcional)</li>
+          
         </ul>
         <li>Presioná Guardar.</li>
       </ol>
@@ -39,7 +37,7 @@ export default function Help() {
       <p>
         Antes de guardar verás:
         <br />
-        <i>“Vas a cargar un viaje con XX metros — ¿estás seguro?”</i>
+        <i>“Vas a gusrdar remito xxx con XX metros — ¿estás seguro?”</i>
       </p>
 
       <hr />

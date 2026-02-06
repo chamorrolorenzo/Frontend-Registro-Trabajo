@@ -13,6 +13,7 @@ function Navbar() {
       <Link to="/trips">Viajes</Link> |{" "}
       <Link to="/hours">Horas</Link> |{" "}
       <Link to="/summary">Resumen</Link> |{" "}
+      <Link to="/help">Ayuda</Link>
       <button onClick={handleLogout}>Salir</button>
     </nav>
   );

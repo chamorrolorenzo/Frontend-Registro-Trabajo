@@ -8,6 +8,7 @@ import Trips from "./pages/Trips";
 import HistoryTrips from "./pages/HistoryTrips";
 import Summary from "./pages/Summary";
 import HistoryHours from "./pages/HistoryHours";
+import Help from "./pages/Help";
 
 import Navbar from "./components/Navbar";
 import "./styles/global.css";
@@ -90,6 +91,16 @@ function App() {
           }
         />
 
+        <Route
+          path="/help"
+          element={
+            <ProtectedRoute>
+              <PrivateLayout>
+                <Help />
+              </PrivateLayout>
+            </ProtectedRoute>
+          }
+          />
         {/* ===== FALLBACK ===== */}
         <Route path="*" element={<Navigate to="/login" replace />} />
 
