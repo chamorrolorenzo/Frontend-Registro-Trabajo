@@ -92,7 +92,7 @@ function App() {
         />
 
         <Route
-          path="/help"
+           path="/help"
           element={
             <ProtectedRoute>
               <PrivateLayout>

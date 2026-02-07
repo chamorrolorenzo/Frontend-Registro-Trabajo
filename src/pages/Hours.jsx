@@ -1,6 +1,7 @@
 import { useState } from "react";
 import api from "../api/api";
 import { Link } from "react-router-dom";
+import SimpleMap from "../components/SimpleMap";
 import "../styles/Hours.css"; // si ya lo usás
 
 function Hours() {
@@ -57,6 +58,8 @@ function Hours() {
         >
           Salir
         </button>
+        <SimpleMap />
+
       </div>
 
       {message && <p className="status-text">{message}</p>}
