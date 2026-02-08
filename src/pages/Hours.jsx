@@ -1,68 +1,13 @@
-import { useState } from "react";
-import api from "../api/api";
 import { Link } from "react-router-dom";
 import SimpleMap from "../components/SimpleMap";
-import "../styles/Hours.css"; // si ya lo usás
+import "../styles/Hours.css";
 
 function Hours() {
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState(null);
-
-  const handleEntry = async () => {
-    setLoading(true);
-    setMessage(null);
-    try {
-      await api.post("/hours/entry");
-      setMessage("Ingreso registrado correctamente");
-    } catch (err) {
-      setMessage(
-        err.response?.data?.message || "Error al registrar ingreso"
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleExit = async () => {
-    setLoading(true);
-    setMessage(null);
-    try {
-      await api.post("/hours/exit");
-      setMessage("Salida registrada correctamente");
-    } catch (err) {
-      setMessage(
-        err.response?.data?.message || "Error al registrar salida"
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
     <div className="page">
       <h1>Cargar horas</h1>
 
-      <div className="hours-actions">
-        <button
-          className="primary-btn"
-          onClick={handleEntry}
-          disabled={loading}
-        >
-          Ingresar
-        </button>
-
-        <button
-          className="secondary-btn"
-          onClick={handleExit}
-          disabled={loading}
-        >
-          Salir
-        </button>
-        <SimpleMap />
-
-      </div>
-
-      {message && <p className="status-text">{message}</p>}
+      <SimpleMap />
 
       <Link to="/hours/history" className="link-hours">
         Ver mis horas →

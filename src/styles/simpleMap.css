@@ -1,0 +1,31 @@
+.simplemap-container {
+  width: 100%;
+}
+
+.simplemap-map {
+  height: 300px;
+  width: 100%;
+}
+
+.inside {
+  color: green;
+  margin-top: 10px;
+}
+
+.outside {
+  color: red;
+  margin-top: 10px;
+}
+
+.close-day-btn {
+  margin-top: 10px;
+  padding: 10px;
+  width: 100%;
+  cursor: pointer;
+}
+.gps-btn {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
