@@ -57,6 +57,9 @@ function Login() {
           <button type="submit">Log in</button>
         </form>
 
+        <Link to="/forgot-password">¿Olvidaste tu contraseña?</Link>
+
+
         {error && <p className="auth-error">{error}</p>}
 
         <p className="auth-footer">
