@@ -17,7 +17,7 @@ export default function ForgotPassword() {
       // 🔥 res YA ES el JSON
       setMessage(res.message || "Si el email existe, se enviará un link");
     } catch (err) {
-      setMessage("Error de conexión");
+      setMessage("No se pudo enviar el link. Intentá más tarde.");
     } finally {
       setLoading(false);
     }
