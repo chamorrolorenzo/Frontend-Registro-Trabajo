@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import api from "../api/api";
 
@@ -9,13 +8,16 @@ export default function ForgotPassword() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setMessage(null);
 
     try {
-      setLoading(true);
       const res = await api.post("/auth/forgot-password", { email });
-      setMessage(res.data.message);
+
+      // 🔥 res YA ES el JSON
+      setMessage(res.message || "Si el email existe, se enviará un link");
     } catch (err) {
-      setMessage("Error enviando link");
+      setMessage("Error de conexión");
     } finally {
       setLoading(false);
     }
