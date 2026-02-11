@@ -1,7 +1,17 @@
-import { MapContainer, TileLayer, Marker, Circle } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Circle, useMap } from "react-leaflet";
 import { useEffect, useState, useRef } from "react";
+import L from "leaflet";
+import markerIcon from "leaflet/dist/images/marker-icon.png";
+import markerShadow from "leaflet/dist/images/marker-shadow.png";
 import api from "../api/api";
 import "../styles/simpleMap.css";
+
+// 🔥 FIX ICONO LEAFLET (IMPORTANTE)
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconUrl: markerIcon,
+  shadowUrl: markerShadow
+});
 
 function getDistance(lat1, lon1, lat2, lon2) {
   const R = 6371000;
@@ -19,6 +29,19 @@ function getDistance(lat1, lon1, lat2, lon2) {
   return R * c;
 }
 
+// 🔄 Para centrar el mapa cuando obtenemos posición
+function Recenter({ position }) {
+  const map = useMap();
+
+  useEffect(() => {
+    if (position) {
+      map.setView(position, 17);
+    }
+  }, [position]);
+
+  return null;
+}
+
 export default function SimpleMap() {
   const company = {
     lat: -34.307026,
@@ -27,50 +50,52 @@ export default function SimpleMap() {
 
   const [userPosition, setUserPosition] = useState(null);
   const [inside, setInside] = useState(false);
-
-  const lastInsideRef = useRef(null);
+  const lastInsideRef = useRef(false);
 
   const handlePosition = async (lat, lng) => {
     const uLat = Number(lat);
     const uLng = Number(lng);
+
+    console.log("MI POSICION:", uLat, uLng);
 
     setUserPosition([uLat, uLng]);
 
     const distance = getDistance(
       uLat,
       uLng,
-      Number(company.lat),
-      Number(company.lng)
+      company.lat,
+      company.lng
     );
 
     const isInside = distance <= 200;
-
     setInside(isInside);
 
-    if (lastInsideRef.current === null) {
-      lastInsideRef.current = false;
-    }
-
+    // 🔥 INGRESO AUTOMÁTICO SOLO AL ENTRAR
     if (!lastInsideRef.current && isInside) {
-      await api.post("/hours/entry");
-      console.log("AUTO ENTRY");
+      try {
+        await api.post("/hours/entry");
+        console.log("AUTO ENTRY");
+      } catch (err) {
+        console.log("ENTRY ERROR:", err);
+      }
     }
 
     lastInsideRef.current = isInside;
   };
 
-  // BOTÓN ACTIVAR GPS
+  // 🔘 Activar GPS manual
   const activateGps = () => {
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         handlePosition(pos.coords.latitude, pos.coords.longitude);
         alert("Ubicación activada correctamente");
       },
-      () => alert("Debes permitir ubicación para usar la aplicación")
+      () => alert("Debes permitir ubicación para usar la aplicación"),
+      { enableHighAccuracy: true }
     );
   };
 
-  // POLLING REAL CADA 1 MINUTO
+  // 🔁 Polling cada 1 minuto
   useEffect(() => {
     const interval = setInterval(() => {
       navigator.geolocation.getCurrentPosition(
@@ -79,22 +104,23 @@ export default function SimpleMap() {
         },
         (err) => {
           console.log("GPS ERROR:", err);
-        }
+        },
+        { enableHighAccuracy: true }
       );
     }, 60000);
 
     return () => clearInterval(interval);
   }, []);
 
-  // CIERRE MANUAL
+  // 🔴 Cierre manual
   const closeDay = async () => {
     if (!userPosition) return alert("No se pudo obtener tu ubicación");
 
     const distance = getDistance(
-      Number(userPosition[0]),
-      Number(userPosition[1]),
-      Number(company.lat),
-      Number(company.lng)
+      userPosition[0],
+      userPosition[1],
+      company.lat,
+      company.lng
     );
 
     if (distance > 200) {
@@ -107,7 +133,6 @@ export default function SimpleMap() {
 
   return (
     <div className="simplemap-container">
-
       <button className="gps-btn" onClick={activateGps}>
         Activar ubicación
       </button>
@@ -122,7 +147,12 @@ export default function SimpleMap() {
         <Marker position={[company.lat, company.lng]} />
         <Circle center={[company.lat, company.lng]} radius={200} />
 
-        {userPosition && <Marker position={userPosition} />}
+        {userPosition && (
+          <>
+            <Marker position={userPosition} />
+            <Recenter position={userPosition} />
+          </>
+        )}
       </MapContainer>
 
       <p className={inside ? "inside" : "outside"}>

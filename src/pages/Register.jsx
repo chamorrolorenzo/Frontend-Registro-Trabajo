@@ -44,9 +44,9 @@ function Register() {
   return (
     <div className="auth-page">
       <div className="auth-card">
-        <h1>Create account</h1>
+        <h1>Crear cuenta</h1>
         <p className="auth-subtitle">
-          Register to start using the system
+          Registrate para empezar a usar el sistema
         </p>
 
         <form className="auth-form" onSubmit={handleSubmit}>
@@ -81,14 +81,14 @@ function Register() {
 
           <input
             type="password"
-            placeholder="Password"
+            placeholder="Ingrese 4 núneros"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
 
           <input
-            placeholder="Company code"
+            placeholder="Nombre de la Empresa"
             value={companyCode}
             onChange={(e) => setCompanyCode(e.target.value)}
             required
@@ -102,8 +102,8 @@ function Register() {
         {error && <p className="auth-error">{error}</p>}
 
         <p className="auth-footer">
-          Already have an account?{" "}
-          <Link to="/login">Log in</Link>
+          Ya tienes cuenta?{" "}
+          <Link to="/login">Iniciar sesion</Link>
         </p>
       </div>
 

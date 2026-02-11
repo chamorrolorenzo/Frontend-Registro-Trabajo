@@ -35,8 +35,8 @@ function Login() {
   return (
     <div className="auth-page">
       <div className="auth-card">
-        <h1>Welcome back</h1>
-        <p className="auth-subtitle">Log in to your account</p>
+        <h1>Bienvenido de nuevo</h1>
+        <p className="auth-subtitle">Accede a tu cuenta</p>
 
         <form className="auth-form" onSubmit={handleSubmit}>
           <input
@@ -54,7 +54,7 @@ function Login() {
             required
           />
 
-          <button type="submit">Log in</button>
+          <button type="submit">Iniciar sesion</button>
         </form>
 
         <Link to="/forgot-password">¿Olvidaste tu contraseña?</Link>
@@ -63,8 +63,8 @@ function Login() {
         {error && <p className="auth-error">{error}</p>}
 
         <p className="auth-footer">
-          Don't have an account?{" "}
-          <Link to="/register">Sign up</Link>
+          ¿No tenes cuenta?{" "}
+          <Link to="/register">Registrate</Link>
         </p>
       </div>
 
