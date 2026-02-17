@@ -1,117 +1,14 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import ProtectedRoute from "./routes/ProtectedRoute";
-
-import ForgotPassword from "./pages/ForgotPassword";
-import ResetPassword from "./pages/ResetPassword";
-
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import Hours from "./pages/Hours";
-import Trips from "./pages/Trips";
-import HistoryTrips from "./pages/HistoryTrips";
-import Summary from "./pages/Summary";
-import HistoryHours from "./pages/HistoryHours";
-import Help from "./pages/Help";
-
-import Navbar from "./components/Navbar";
+import { BrowserRouter } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
+import AppRouter from "./routes/AppRouter";
 import "./styles/global.css";
 
-// Layout privado (navbar + contenido)
-function PrivateLayout({ children }) {
-  return (
-    <>
-      <Navbar />
-      {children}
-    </>
-  );
-}
-
-function App() {
+export default function App() {
   return (
     <BrowserRouter>
-      <Routes>
-
-        {/* ===== REDIRECCIÓN INICIAL ===== */}
-        <Route path="/" element={<Navigate to="/login" replace />} />
-
-        {/* ===== RUTAS PÚBLICAS ===== */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
-
-        {/* ===== RUTAS PRIVADAS ===== */}
-        <Route
-          path="/hours"
-          element={
-            <ProtectedRoute>
-              <PrivateLayout>
-                <Hours />
-              </PrivateLayout>
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/hours/history"
-          element={
-            <ProtectedRoute>
-              <PrivateLayout>
-                <HistoryHours />
-              </PrivateLayout>
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/trips"
-          element={
-            <ProtectedRoute>
-              <PrivateLayout>
-                <Trips />
-              </PrivateLayout>
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/trips/history"
-          element={
-            <ProtectedRoute>
-              <PrivateLayout>
-                <HistoryTrips />
-              </PrivateLayout>
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/summary"
-          element={
-            <ProtectedRoute>
-              <PrivateLayout>
-                <Summary />
-              </PrivateLayout>
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-           path="/help"
-          element={
-            <ProtectedRoute>
-              <PrivateLayout>
-                <Help />
-              </PrivateLayout>
-            </ProtectedRoute>
-          }
-          />
-        {/* ===== FALLBACK ===== */}
-        <Route path="*" element={<Navigate to="/login" replace />} />
-
-      </Routes>
+      <AuthProvider>
+        <AppRouter />
+      </AuthProvider>
     </BrowserRouter>
   );
 }
-
-export default App;
