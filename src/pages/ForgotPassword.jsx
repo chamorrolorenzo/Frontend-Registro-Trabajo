@@ -16,9 +16,11 @@ export default function ForgotPassword() {
 
       // 🔥 res YA ES el JSON
       setMessage(res.message || "Si el email existe, se enviará un link");
-    } catch (err) {
-      setMessage("No se pudo enviar el link. Intentá más tarde.");
-    } finally {
+    }
+    catch (err) {
+      setMessage(err.message || "No se pudo enviar el link.");
+    }
+    finally {
       setLoading(false);
     }
   };
@@ -33,7 +35,6 @@ export default function ForgotPassword() {
           placeholder="Tu email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          required
         />
 
         <button disabled={loading}>

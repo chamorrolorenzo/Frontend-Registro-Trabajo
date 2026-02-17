@@ -10,38 +10,31 @@ export default function ResetPassword() {
 
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!token) {
-      setMessage("Token inválido");
-      return;
-    }
+    setLoading(true);
+    setMessage(null);
 
     try {
-      await api.post("/auth/reset-password", {
+      const res = await api.post("/auth/reset-password", {
         token,
         password,
       });
 
-      setMessage("Contraseña actualizada. Ya podés iniciar sesión.");
-
-      // limpia el token del navegador
-      window.history.replaceState({}, document.title, "/login");
-
-      // redirige al login después de 2 segundos
-      setTimeout(() => {
-        navigate("/login");
-      }, 2000);
-    } catch {
-      setMessage("Token inválido o expirado");
+      setMessage(res.message || "Contraseña actualizada");
+      
+    } catch (err) {
+      setMessage(err.message || "No se pudo actualizar la contraseña");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="page">
-      <h2>Nueva contraseña</h2>
+      <h2>Restablecer contraseña</h2>
 
       <form onSubmit={handleSubmit}>
         <input
@@ -49,10 +42,11 @@ export default function ResetPassword() {
           placeholder="Nueva contraseña (4 números)"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          required
         />
 
-        <button>Guardar</button>
+        <button disabled={loading}>
+          {loading ? "Actualizando..." : "Actualizar contraseña"}
+        </button>
       </form>
 
       {message && <p>{message}</p>}
