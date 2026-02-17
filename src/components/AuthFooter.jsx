@@ -9,7 +9,8 @@ function AuthFooter() {
         <a href="mailto:chamorrolorenzosebastian@gmail.com">
           chamorrolorenzosebastian@gmail.com
         </a>{" "}
-        · Tel: +54 11 5617-1247
+        <br />
+         Tel: +54 11 5617-1247
       </p>
       <p>
         GitHub:{" "}

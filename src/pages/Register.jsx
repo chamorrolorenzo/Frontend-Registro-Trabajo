@@ -32,11 +32,14 @@ function Register() {
         password,
         empresa: companyCode,
       });
-
       navigate("/login");
-    } catch (err) {
-      setError("Could not create account. Please check the data.");
-    } finally {
+    }
+
+    catch (err) {
+      setError(err.message || "Error al crear la cuenta");
+    }
+    
+ finally {
       setLoading(false);
     }
   };
@@ -48,57 +51,49 @@ function Register() {
         <p className="auth-subtitle">
           Registrate para empezar a usar el sistema
         </p>
-
         <form className="auth-form" onSubmit={handleSubmit}>
-          <input
-            placeholder="First name"
-            value={nombre}
-            onChange={(e) => setNombre(e.target.value)}
-            required
-          />
+        <input
+          placeholder="Nombre"
+          value={nombre}
+          onChange={(e) => setNombre(e.target.value)}
+        />
 
-          <input
-            placeholder="Last name"
-            value={apellido}
-            onChange={(e) => setApellido(e.target.value)}
-            required
-          />
+        <input
+          placeholder="Apellido"
+          value={apellido}
+          onChange={(e) => setApellido(e.target.value)}
+        />
 
-          <input
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
+        <input
+          placeholder="Usuario (mínimo 8 caracteres)"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
 
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
 
-          <input
-            type="password"
-            placeholder="Ingrese 4 núneros"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+        <input
+          type="password"
+          placeholder="Ingrese 4 números"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
 
-          <input
-            placeholder="Nombre de la Empresa"
-            value={companyCode}
-            onChange={(e) => setCompanyCode(e.target.value)}
-            required
-          />
+        <input
+          placeholder="Nombre de la Empresa"
+          value={companyCode}
+          onChange={(e) => setCompanyCode(e.target.value)}
+        />
 
-          <button type="submit" disabled={loading}>
-            {loading ? "Creating account..." : "Create account"}
-          </button>
-        </form>
-
+        <button type="submit" disabled={loading}>
+          {loading ? "Creando cuenta..." : "Crear cuenta"}
+        </button>
+              </form>
         {error && <p className="auth-error">{error}</p>}
 
         <p className="auth-footer">
