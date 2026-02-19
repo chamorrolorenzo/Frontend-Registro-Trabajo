@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import SimpleMap from "../components/SimpleMap";
-import "../styles/Hours.css";
+import "../styles/hours.css";
 
 function Hours() {
   return (
