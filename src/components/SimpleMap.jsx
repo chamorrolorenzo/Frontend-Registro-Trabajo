@@ -44,8 +44,8 @@ function Recenter({ position }) {
 
 export default function SimpleMap() {
   const company = {
-    lat: -34.307026,
-    lng: -58.864212
+    lat: -34.305701,
+    lng: -58.862443
   };
 
   const [userPosition, setUserPosition] = useState(null);
@@ -67,7 +67,7 @@ export default function SimpleMap() {
       company.lng
     );
 
-    const isInside = distance <= 200;
+    const isInside = distance <= 500;
     setInside(isInside);
 
     // 🔥 INGRESO AUTOMÁTICO SOLO AL ENTRAR

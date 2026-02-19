@@ -24,7 +24,12 @@ export default function ResetPassword() {
       });
 
       setMessage(res.message || "Contraseña actualizada");
-      
+
+      // opcional: volver al login luego de 2s
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 2000);
+
     } catch (err) {
       setMessage(err.message || "No se pudo actualizar la contraseña");
     } finally {

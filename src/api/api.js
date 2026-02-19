@@ -1,6 +1,5 @@
 const BASE_URL = "https://backend-registro-trabajo.onrender.com";
 
-
 async function request(endpoint, options = {}) {
   const token = localStorage.getItem("token");
 
