@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../api/api";
+import toast from "react-hot-toast";
 import "../styles/trips.css";
 
 
@@ -26,9 +27,15 @@ function Trips() {
       setRemito("");
       setCubicMeters("");
       setDate(today);
-      alert("Viaje guardado");
+      toast.success("Viaje guardado correctamente 🚚", {
+         duration: 3000,
+         className: "toast-success",
+      });
     } catch {
-      alert("Error al guardar viaje");
+     toast.error("Error al guardar viaje", {
+        duration: 3000,
+        className: "toast-error",
+      });
     } finally {
       setLoading(false);
     }

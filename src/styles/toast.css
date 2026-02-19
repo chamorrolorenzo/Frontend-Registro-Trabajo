@@ -1,0 +1,20 @@
+.toast-success,
+.toast-error {
+  font-size: 22px !important;
+  padding: 28px 36px !important;
+  min-width: 420px !important;
+  border-radius: 16px !important;
+  text-align: center !important;
+  box-shadow: 0 12px 40px rgba(0,0,0,.5);
+  font-weight: 600;
+}
+
+.toast-success {
+  background: #2563eb !important;
+  color: white !important;
+}
+
+.toast-error {
+  background: #dc2626 !important;
+  color: white !important;
+}
