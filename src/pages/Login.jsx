@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import api from "../api/api";
 import AuthFooter from "../components/AuthFooter";
-
 import "../styles/auth.css";
 
 function Login() {
@@ -22,10 +21,10 @@ function Login() {
         password,
       });
 
-      // 🔑 ÚNICA fuente de verdad
+      //  ÚNICA fuente de verdad
       localStorage.setItem("token", data.token);
 
-      // 👉 HOME REAL
+      //  HOME REAL
       navigate("/summary", { replace: true });
     } catch (err) {
       setError("Invalid credentials");
@@ -68,7 +67,7 @@ function Login() {
         </p>
       </div>
 
-      {/* 👇 FOOTER INSTITUCIONAL */}
+      {/* FOOTER INSTITUCIONAL */}
       <AuthFooter />
     </div>
   );

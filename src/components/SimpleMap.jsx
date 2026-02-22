@@ -127,7 +127,7 @@ export default function SimpleMap() {
       return alert("Debes estar en la empresa para finalizar la jornada");
     }
 
-    await api.post("/hours/close");
+    await api.post("/hours/exit");
     alert("Jornada finalizada");
   };
 
