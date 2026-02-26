@@ -6,7 +6,7 @@ import markerShadow from "leaflet/dist/images/marker-shadow.png";
 import api from "../api/api";
 import "../styles/simpleMap.css";
 
-// 🔥 FIX ICONO LEAFLET (IMPORTANTE)
+//  FIX ICONO LEAFLET (IMPORTANTE)
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconUrl: markerIcon,
@@ -29,7 +29,7 @@ function getDistance(lat1, lon1, lat2, lon2) {
   return R * c;
 }
 
-// 🔄 Para centrar el mapa cuando obtenemos posición
+//  Para centrar el mapa cuando obtenemos posición
 function Recenter({ position }) {
   const map = useMap();
 
@@ -52,67 +52,64 @@ export default function SimpleMap() {
   const [inside, setInside] = useState(false);
   const lastInsideRef = useRef(false);
 
-  const handlePosition = async (lat, lng) => {
-    const uLat = Number(lat);
-    const uLng = Number(lng);
+  const [gpsActive, setGpsActive] = useState(false);
 
-    console.log("MI POSICION:", uLat, uLng);
+ const handlePosition = async (lat, lng) => {
+  const uLat = Number(lat);
+  const uLng = Number(lng);
 
-    setUserPosition([uLat, uLng]);
+  console.log("MI POSICION:", uLat, uLng);
 
-    const distance = getDistance(
-      uLat,
-      uLng,
-      company.lat,
-      company.lng
-    );
+  setUserPosition([uLat, uLng]);
 
-    const isInside = distance <= 500;
-    setInside(isInside);
+  const distance = getDistance(
+    uLat,
+    uLng,
+    company.lat,
+    company.lng
+  );
 
-    // 🔥 INGRESO AUTOMÁTICO SOLO AL ENTRAR
-    if (!lastInsideRef.current && isInside) {
-      try {
-        await api.post("/hours/entry");
-        console.log("AUTO ENTRY");
-      } catch (err) {
-        console.log("ENTRY ERROR:", err);
-      }
+  const isInside = distance <= 500;
+  setInside(isInside);
+
+  // AUTO ENTRY
+  if (isInside && !lastInsideRef.current) {
+    try {
+      await api.post("/hours/entry");
+      console.log("AUTO ENTRY");
+    } catch (err) {
+      console.log("ENTRY ERROR:", err);
     }
+  }
 
-    lastInsideRef.current = isInside;
-  };
-
-  // 🔘 Activar GPS manual
+  lastInsideRef.current = isInside;
+};
+    
   const activateGps = () => {
-    navigator.geolocation.getCurrentPosition(
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      handlePosition(pos.coords.latitude, pos.coords.longitude);
+      setGpsActive(true); // 🔥 marcamos activo
+    },
+    () => alert("Debes permitir ubicación para usar la aplicación"),
+    { enableHighAccuracy: true }
+  );
+};
+
+    useEffect(() => {
+    const watcher = navigator.geolocation.watchPosition(
       (pos) => {
         handlePosition(pos.coords.latitude, pos.coords.longitude);
-        alert("Ubicación activada correctamente");
       },
-      () => alert("Debes permitir ubicación para usar la aplicación"),
+      (err) => {
+        console.log("GPS ERROR:", err);
+      },
       { enableHighAccuracy: true }
     );
-  };
 
-  // 🔁 Polling cada 1 minuto
-  useEffect(() => {
-    const interval = setInterval(() => {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          handlePosition(pos.coords.latitude, pos.coords.longitude);
-        },
-        (err) => {
-          console.log("GPS ERROR:", err);
-        },
-        { enableHighAccuracy: true }
-      );
-    }, 60000);
-
-    return () => clearInterval(interval);
+    return () => navigator.geolocation.clearWatch(watcher);
   }, []);
 
-  // 🔴 Cierre manual
   const closeDay = async () => {
     if (!userPosition) return alert("No se pudo obtener tu ubicación");
 
@@ -133,9 +130,12 @@ export default function SimpleMap() {
 
   return (
     <div className="simplemap-container">
-      <button className="gps-btn" onClick={activateGps}>
-        Activar ubicación
-      </button>
+      <button
+  className={`gps-btn ${gpsActive ? "gps-active" : ""}`}
+  onClick={activateGps}
+>
+  {gpsActive ? "Ubicación activa" : "Activar ubicación"}
+</button>
 
       <MapContainer
         center={[company.lat, company.lng]}
@@ -143,7 +143,6 @@ export default function SimpleMap() {
         className="simplemap-map"
       >
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-
         <Marker position={[company.lat, company.lng]} />
         <Circle center={[company.lat, company.lng]} radius={200} />
 

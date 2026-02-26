@@ -29,3 +29,20 @@
   margin-bottom: 10px;
   cursor: pointer;
 }
+
+
+.gps-btn {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  background-color: #2563eb; /* azul */
+  color: white;
+  border: none;
+  border-radius: 6px;
+}
+
+.gps-active {
+  background-color: #86efac; /* verde suave */
+  color: #065f46;
+}
