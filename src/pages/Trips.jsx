@@ -43,6 +43,14 @@ function Trips() {
 
   return (
     <div className="page">
+
+       <div className="empresa-banner">
+        <img
+          src="https://i.imgur.com/im56cvZ.jpeg"
+          alt="Val Jaime"
+        />
+      </div>
+
       <h1>Agregar viaje</h1>
 
       <label>Remito</label>

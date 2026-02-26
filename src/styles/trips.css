@@ -69,3 +69,18 @@
   box-shadow: none;
   transform: none;
 }
+
+
+.empresa-banner {
+  width: 100%;
+  max-width: 800px;
+  height: 150px;
+  margin: 0 auto 20px auto;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.empresa-banner img {
+  width: 110%;
+ transform: translate(-20px, -80px);
+}
