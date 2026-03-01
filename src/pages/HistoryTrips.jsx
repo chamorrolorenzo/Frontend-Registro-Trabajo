@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 import api from "../api/api";
+import { useMonth } from "../context/MonthContext";
 import "../styles/HistoryTrips.css";
 
-// Precios definidos por la empresa (Vial Jaime)
 const PRICE_PER_TRIP = 8000;
 const PRICE_PER_CUBIC_METER = 800;
 
-// Fecha + hora Argentina (compacta)
 const formatDateTime = (iso) =>
   new Date(iso).toLocaleString("es-AR", {
     timeZone: "America/Argentina/Buenos_Aires",
@@ -18,28 +17,20 @@ const formatDateTime = (iso) =>
   });
 
 function HistoryTrips() {
+  const { month, year } = useMonth(); // ⭐ USAMOS CONTEXTO
+
   const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchTrips = async () => {
       try {
-        const data = await api.get("/trips");
+        // ⭐ ahora pedimos al backend filtrado por mes
+        const data = await api.get(
+          `/trips?month=${month}&year=${year}`
+        );
 
-        // 📅 FILTRO: solo viajes del mes/año actual
-        const now = new Date();
-        const currentMonth = now.getMonth();
-        const currentYear = now.getFullYear();
-
-        const filtered = data.filter((trip) => {
-          const d = new Date(trip.createdAt);
-          return (
-            d.getMonth() === currentMonth &&
-            d.getFullYear() === currentYear
-          );
-        });
-
-        setTrips(filtered);
+        setTrips(data);
       } catch (error) {
         console.error("Error fetching trips", error);
       } finally {
@@ -48,7 +39,7 @@ function HistoryTrips() {
     };
 
     fetchTrips();
-  }, []);
+  }, [month, year]); // ⭐ DEPENDE DEL MES GLOBAL
 
   const calculateAmount = (trip) =>
     PRICE_PER_TRIP + trip.cubicMeters * PRICE_PER_CUBIC_METER;
@@ -76,7 +67,7 @@ function HistoryTrips() {
               </span>
 
               <span className="trip-remito">
-                 {trip.remito}
+                {trip.remito}
               </span>
 
               <span className="trip-meters">

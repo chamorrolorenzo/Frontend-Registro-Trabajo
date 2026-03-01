@@ -1,23 +1,12 @@
 import { useEffect, useState } from "react";
 import api from "../api/api";
+import { useMonth } from "../context/MonthContext";
+import MonthSelector from "../components/MonthSelector";
 import "../styles/summary.css";
 
 function Summary() {
-  const now = new Date();
-
-  const currentMonth = now.getMonth() + 1;
-  const currentYear = now.getFullYear();
-
-  const [periods, setPeriods] = useState([]);
-  const [month, setMonth] = useState(currentMonth);
-  const [year, setYear] = useState(currentYear);
+  const { month, year } = useMonth();
   const [summary, setSummary] = useState(null);
-
-  useEffect(() => {
-    api.get("/summary/periods").then((data) => {
-      setPeriods(data);
-    });
-  }, []);
 
   useEffect(() => {
     fetchSummary();
@@ -34,22 +23,7 @@ function Summary() {
       {/* HEADER */}
       <div className="summary-header">
         <h1>Resumen mensual</h1>
-
-        <select
-          className="summary-period"
-          value={`${month}-${year}`}
-          onChange={(e) => {
-            const [m, y] = e.target.value.split("-");
-            setMonth(Number(m));
-            setYear(Number(y));
-          }}
-        >
-          {periods.map((p) => (
-            <option key={`${p.month}-${p.year}`} value={`${p.month}-${p.year}`}>
-              {p.month}/{p.year}
-            </option>
-          ))}
-        </select>
+        <MonthSelector />
       </div>
 
       {summary && !summary.empty && (
@@ -108,6 +82,7 @@ function Summary() {
 
         </div>
       )}
+
     </div>
   );
 }

@@ -19,6 +19,7 @@
 
 .close-day-btn {
   margin-top: 10px;
+  margin-bottom: 15px;
   padding: 10px;
   width: 100%;
   cursor: pointer;
@@ -39,7 +40,7 @@
   background-color: #2563eb; /* azul */
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 20px;
 }
 
 .gps-active {

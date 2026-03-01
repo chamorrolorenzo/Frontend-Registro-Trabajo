@@ -73,26 +73,20 @@
 
 .empresa-banner {
   width: 100%;
-  max-width: 480px; /* mismo ancho que la page */
   height: 150px;
-  margin: 0 auto 20px auto;
-  border-radius: 16px;
   overflow: hidden;
+  border-radius: 16px;
 }
 
 .empresa-banner img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
+  object-position: center 40%;
 }
+
 @media (max-width: 600px) {
   .empresa-banner {
-    height: 90px;
-  }
-
-  .empresa-banner img {
-    width: 130%;
-    transform: translateY(-60px);
+    height: 120px;
   }
 }

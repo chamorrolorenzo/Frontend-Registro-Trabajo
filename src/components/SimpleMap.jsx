@@ -57,7 +57,7 @@ export default function SimpleMap() {
   // ⭐ AGREGADO — estado jornada
 const [hasEntry, setHasEntry] = useState(false);
 const [hasExit, setHasExit] = useState(false);
-const [loadingStatus, setLoadingStatus] = useState(true); // ⭐ NUEVO
+const [loadingStatus, setLoadingStatus] = useState(true); 
   // ⭐ AGREGADO — consultar estado real al backend
   const loadStatus = async () => {
     try {
@@ -90,31 +90,46 @@ const [loadingStatus, setLoadingStatus] = useState(true); // ⭐ NUEVO
     setInside(distance <= 200);
   };
 
-  const activateGps = () => {
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        handlePosition(pos.coords.latitude, pos.coords.longitude);
-        setGpsActive(true);
-      },
-      () => alert("Debes permitir ubicación para usar la aplicación"),
-      { enableHighAccuracy: true }
-    );
-  };
-
+ const activateGps = () => {
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      handlePosition(
+        pos.coords.latitude,
+        pos.coords.longitude
+      );
+      setGpsActive(true);
+    },
+    (error) => {
+      console.log("GPS ERROR:", error);
+      alert("Debes permitir ubicación para usar la aplicación");
+    },
+    {
+      enableHighAccuracy: true,
+      timeout: 10000,
+      maximumAge: 0,
+    }
+  );
+};
   // ⭐ GPS watcher 
   useEffect(() => {
-    const watcher = navigator.geolocation.watchPosition(
-      (pos) => {
-        handlePosition(pos.coords.latitude, pos.coords.longitude);
-      },
-      (err) => {
-        console.log("GPS ERROR:", err);
-      },
-      { enableHighAccuracy: true }
-    );
+  if (!gpsActive) return;
 
-    return () => navigator.geolocation.clearWatch(watcher);
-  }, []);
+  const watcher = navigator.geolocation.watchPosition(
+    (pos) => {
+      handlePosition(pos.coords.latitude, pos.coords.longitude);
+    },
+    (err) => {
+      console.log("GPS ERROR:", err);
+    },
+    {
+      enableHighAccuracy: true,
+      timeout: 10000,
+      maximumAge: 0,
+    }
+  );
+
+  return () => navigator.geolocation.clearWatch(watcher);
+}, [gpsActive]);
 
   // ⭐ AGREGADO — cuando abre la pantalla consulta jornada actual
   useEffect(() => {
@@ -140,6 +155,7 @@ const [loadingStatus, setLoadingStatus] = useState(true); // ⭐ NUEVO
   const closeDay = async () => {
     if (!inside) {
       return alert("Debes estar en la empresa para finalizar la jornada");
+      
     }
 
     try {
@@ -163,12 +179,12 @@ const [loadingStatus, setLoadingStatus] = useState(true); // ⭐ NUEVO
         {gpsActive ? "Ubicación activa" : "Activar ubicación"}
       </button>
 
-      {/* ⭐ AGREGADO — BOTON INICIAR JORNADA */}
+      {/* ⭐ BOTON INICIAR JORNADA */}
       {!hasEntry && (
         <button
           className="close-day-btn"
           onClick={startDay}
-           disabled={!inside || !hasEntry || hasExit || loadingStatus}
+          disabled={!inside}
         >
           Iniciar jornada
         </button>
@@ -197,8 +213,8 @@ const [loadingStatus, setLoadingStatus] = useState(true); // ⭐ NUEVO
         {inside
           ? "Dentro del área de la empresa"
           : "Fuera del área de la empresa"}
-      </p>
-
+        </p>
+        
       {/* ⭐ MODIFICADO — control lógico */}
       <button
         className="close-day-btn"

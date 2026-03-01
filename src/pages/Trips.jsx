@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../api/api";
 import toast from "react-hot-toast";
+
 import "../styles/trips.css";
 
 

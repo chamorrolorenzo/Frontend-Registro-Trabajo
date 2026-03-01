@@ -4,6 +4,7 @@ import { LoadingProvider, useLoading } from "./context/LoadingContext";
 import AppRouter from "./routes/AppRouter";
 import { useEffect } from "react";
 import { setLoadingHandler } from "./api/api";
+import { MonthProvider } from "./context/MonthContext";
 import "./styles/global.css";
 
 // ⭐ Loader visual global
@@ -43,9 +44,11 @@ function AppContent() {
 export default function App() {
   return (
     <BrowserRouter>
-      <LoadingProvider> {/* ⭐ AGREGADO */}
+      <LoadingProvider>
         <AuthProvider>
-          <AppContent />
+          <MonthProvider>
+            <AppContent />
+          </MonthProvider>
         </AuthProvider>
       </LoadingProvider>
     </BrowserRouter>
