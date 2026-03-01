@@ -1,18 +1,19 @@
 import { MapContainer, TileLayer, Marker, Circle, useMap } from "react-leaflet";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import L from "leaflet";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 import api from "../api/api";
 import "../styles/simpleMap.css";
 
-//  FIX ICONO LEAFLET (IMPORTANTE)
+// FIX ICONO LEAFLET
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconUrl: markerIcon,
   shadowUrl: markerShadow
 });
 
+// CALCULO DISTANCIA (sin cambios)
 function getDistance(lat1, lon1, lat2, lon2) {
   const R = 6371000;
   const dLat = ((lat2 - lat1) * Math.PI) / 180;
@@ -29,7 +30,7 @@ function getDistance(lat1, lon1, lat2, lon2) {
   return R * c;
 }
 
-//  Para centrar el mapa cuando obtenemos posición
+// ===============================
 function Recenter({ position }) {
   const map = useMap();
 
@@ -41,6 +42,7 @@ function Recenter({ position }) {
 
   return null;
 }
+// ===============================
 
 export default function SimpleMap() {
   const company = {
@@ -50,53 +52,57 @@ export default function SimpleMap() {
 
   const [userPosition, setUserPosition] = useState(null);
   const [inside, setInside] = useState(false);
-  const lastInsideRef = useRef(false);
-
   const [gpsActive, setGpsActive] = useState(false);
 
- const handlePosition = async (lat, lng) => {
-  const uLat = Number(lat);
-  const uLng = Number(lng);
-
-  console.log("MI POSICION:", uLat, uLng);
-
-  setUserPosition([uLat, uLng]);
-
-  const distance = getDistance(
-    uLat,
-    uLng,
-    company.lat,
-    company.lng
-  );
-
-  const isInside = distance <= 500;
-  setInside(isInside);
-
-  // AUTO ENTRY
-  if (isInside && !lastInsideRef.current) {
+  // ⭐ AGREGADO — estado jornada
+const [hasEntry, setHasEntry] = useState(false);
+const [hasExit, setHasExit] = useState(false);
+const [loadingStatus, setLoadingStatus] = useState(true); // ⭐ NUEVO
+  // ⭐ AGREGADO — consultar estado real al backend
+  const loadStatus = async () => {
     try {
-      await api.post("/hours/entry");
-      console.log("AUTO ENTRY");
+      const data = await api.get("/hours/status");
+
+      // backend dice si ya inició o terminó
+      setHasEntry(data.hasEntry);
+      setHasExit(data.hasExit);
+
     } catch (err) {
-      console.log("ENTRY ERROR:", err);
+      console.log("STATUS ERROR", err);
+    } finally{
+      setLoadingStatus(false);
     }
-  }
+  };
+ 
+  // GPS POSITION
+  const handlePosition = (lat, lng) => {
+    const uLat = Number(lat);
+    const uLng = Number(lng);
 
-  lastInsideRef.current = isInside;
-};
-    
+    setUserPosition([uLat, uLng]);
+
+    const distance = getDistance(
+      uLat,
+      uLng,
+      company.lat,
+      company.lng
+    );
+    setInside(distance <= 200);
+  };
+
   const activateGps = () => {
-  navigator.geolocation.getCurrentPosition(
-    (pos) => {
-      handlePosition(pos.coords.latitude, pos.coords.longitude);
-      setGpsActive(true); // 🔥 marcamos activo
-    },
-    () => alert("Debes permitir ubicación para usar la aplicación"),
-    { enableHighAccuracy: true }
-  );
-};
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        handlePosition(pos.coords.latitude, pos.coords.longitude);
+        setGpsActive(true);
+      },
+      () => alert("Debes permitir ubicación para usar la aplicación"),
+      { enableHighAccuracy: true }
+    );
+  };
 
-    useEffect(() => {
+  // ⭐ GPS watcher 
+  useEffect(() => {
     const watcher = navigator.geolocation.watchPosition(
       (pos) => {
         handlePosition(pos.coords.latitude, pos.coords.longitude);
@@ -110,33 +116,65 @@ export default function SimpleMap() {
     return () => navigator.geolocation.clearWatch(watcher);
   }, []);
 
+  // ⭐ AGREGADO — cuando abre la pantalla consulta jornada actual
+  useEffect(() => {
+    loadStatus();
+  }, []);
+  
+  // INICIAR JORNADA (HIBRIDO)
+  const startDay = async () => {
+    if (!inside) {
+      return alert("Debes estar dentro de la empresa");
+    }
+
+    try {
+      await api.post("/hours/entry");
+      setHasEntry(true); // actualiza UI inmediatamente
+      alert("Jornada iniciada");
+    } catch (err) {
+      alert("Error al iniciar jornada");
+    }
+  };
+  
+  // FINALIZAR JORNADA
   const closeDay = async () => {
-    if (!userPosition) return alert("No se pudo obtener tu ubicación");
-
-    const distance = getDistance(
-      userPosition[0],
-      userPosition[1],
-      company.lat,
-      company.lng
-    );
-
-    if (distance > 200) {
+    if (!inside) {
       return alert("Debes estar en la empresa para finalizar la jornada");
     }
 
-    await api.post("/hours/exit");
-    alert("Jornada finalizada");
+    try {
+      await api.post("/hours/exit");
+      setHasExit(true); // ⭐ AGREGADO
+      alert("Jornada finalizada");
+    } catch (err) {
+      alert("Error al finalizar jornada");
+    }
   };
 
-  return (
+    // UI
+    return (
     <div className="simplemap-container">
-      <button
-  className={`gps-btn ${gpsActive ? "gps-active" : ""}`}
-  onClick={activateGps}
->
-  {gpsActive ? "Ubicación activa" : "Activar ubicación"}
-</button>
 
+      {/* BOTON GPS */}
+      <button
+        className={`gps-btn ${gpsActive ? "gps-active" : ""}`}
+        onClick={activateGps}
+      >
+        {gpsActive ? "Ubicación activa" : "Activar ubicación"}
+      </button>
+
+      {/* ⭐ AGREGADO — BOTON INICIAR JORNADA */}
+      {!hasEntry && (
+        <button
+          className="close-day-btn"
+          onClick={startDay}
+           disabled={!inside || !hasEntry || hasExit || loadingStatus}
+        >
+          Iniciar jornada
+        </button>
+      )}
+
+      {/* MAPA */}
       <MapContainer
         center={[company.lat, company.lng]}
         zoom={16}
@@ -154,15 +192,22 @@ export default function SimpleMap() {
         )}
       </MapContainer>
 
+      {/* ESTADO */}
       <p className={inside ? "inside" : "outside"}>
         {inside
           ? "Dentro del área de la empresa"
           : "Fuera del área de la empresa"}
       </p>
 
-      <button className="close-day-btn" onClick={closeDay}>
+      {/* ⭐ MODIFICADO — control lógico */}
+      <button
+        className="close-day-btn"
+        onClick={closeDay}
+        disabled={!inside || !hasEntry || hasExit}
+      >
         Finalizar jornada
       </button>
+
     </div>
   );
 }
