@@ -13,8 +13,15 @@ function Summary() {
   }, [month, year]);
 
   const fetchSummary = async () => {
-    const data = await api.get(`/summary?month=${month}&year=${year}`);
-    setSummary(data);
+    try {
+      const data = await api.get(
+        `/summary?month=${month}&year=${year}`
+      );
+      setSummary(data);
+    } catch (error) {
+      console.error("Error fetching summary", error);
+      setSummary({ empty: true });
+    }
   };
 
   return (
@@ -26,7 +33,14 @@ function Summary() {
         <MonthSelector />
       </div>
 
-      {summary && !summary.empty && (
+      {/* CONTENIDO */}
+      {!summary ? null : summary.empty ? (
+
+        <p className="empty-text">
+          Aún no hay actividad este mes
+        </p>
+
+      ) : (
 
         <div className="liquidation">
 
@@ -41,7 +55,9 @@ function Summary() {
             <div className="values">
               <span>{summary.trips.count}</span>
               <span>{summary.trips.cubicMeters}</span>
-              <span>${summary.trips.subtotal.toLocaleString()}</span>
+              <span>
+                ${summary.trips.subtotal.toLocaleString()}
+              </span>
             </div>
           </div>
 
@@ -54,9 +70,11 @@ function Summary() {
             </div>
 
             <div className="values">
-              <span>{summary.hours.normal || 0}</span>
-              <span>{summary.hours.extra || 0}</span>
-              <span>${summary.hours.subtotal.toLocaleString()}</span>
+              <span>{summary.hours.normal}</span>
+              <span>{summary.hours.extra}</span>
+              <span>
+                ${summary.hours.subtotal.toLocaleString()}
+              </span>
             </div>
           </div>
 
@@ -71,7 +89,9 @@ function Summary() {
             <div className="values">
               <span>{summary.incentive}</span>
               <span>-</span>
-              <span>${summary.incentive.toLocaleString()}</span>
+              <span>
+                ${summary.incentive.toLocaleString()}
+              </span>
             </div>
           </div>
 
@@ -81,6 +101,7 @@ function Summary() {
           </div>
 
         </div>
+
       )}
 
     </div>

@@ -26,16 +26,14 @@ function HistoryHours() {
 
   useEffect(() => {
     const fetchHours = async () => {
-      setLoading(true); // ⭐ IMPORTANTE cuando cambia el mes
+      setLoading(true);
 
       try {
-        const data = await api.get(
-          `/hours?month=${month}&year=${year}`
-        );
+        const data = await api.get(`/hours?month=${month}&year=${year}`);
 
-        // ⭐ ordenamos por fecha descendente (más nuevo arriba)
+        // ✅ ordenar por el momento real (entryTime), no por el bucket (date)
         const sorted = [...data].sort(
-          (a, b) => new Date(b.date) - new Date(a.date)
+          (a, b) => new Date(b.entryTime) - new Date(a.entryTime)
         );
 
         setRecords(sorted);
@@ -57,32 +55,24 @@ function HistoryHours() {
       {loading ? (
         <p className="empty-text">Cargando horas…</p>
       ) : records.length === 0 ? (
-        <p className="empty-text">
-          No hay horas cargadas este mes
-        </p>
+        <p className="empty-text">No hay horas cargadas este mes</p>
       ) : (
         <div className="hours-list">
           {records.map((h) => {
-            const totalHours = h.totalMinutes / 60;
-            const extraHours =
-              totalHours > 8 ? totalHours - 8 : 0;
+            const totalHours = (h.totalMinutes ?? 0) / 60;
+            const extraHours = totalHours > 8 ? totalHours - 8 : 0;
 
             return (
               <div className="hour-card" key={h._id}>
                 <div className="hour-row">
+                  {/* ✅ fecha desde entryTime */}
                   <span className="hour-date">
-                    {formatDate(h.date)}
+                    {formatDate(h.entryTime)}
                   </span>
 
                   <span className="hour-time">
                     {formatTime(h.entryTime)} –{" "}
-                    {h.exitTime
-                      ? formatTime(h.exitTime)
-                      : "—"}
-                  </span>
-
-                  <span className="hour-total">
-                    {totalHours.toFixed(2)} hs
+                    {h.exitTime ? formatTime(h.exitTime) : "—"}
                   </span>
 
                   <span className="hour-extra">
