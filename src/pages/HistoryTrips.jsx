@@ -17,7 +17,8 @@ const formatDateTime = (iso) =>
   });
 
 function HistoryTrips() {
-  const { month, year } = useMonth(); // ⭐ USAMOS CONTEXTO
+
+  const { month, year } = useMonth();
 
   const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -25,12 +26,13 @@ function HistoryTrips() {
   useEffect(() => {
     const fetchTrips = async () => {
       try {
-        // ⭐ ahora pedimos al backend filtrado por mes
+
         const data = await api.get(
           `/trips?month=${month}&year=${year}`
         );
 
         setTrips(data);
+
       } catch (error) {
         console.error("Error fetching trips", error);
       } finally {
@@ -39,15 +41,14 @@ function HistoryTrips() {
     };
 
     fetchTrips();
-  }, [month, year]); // ⭐ DEPENDE DEL MES GLOBAL
+  }, [month, year]);
 
   const calculateAmount = (trip) =>
     PRICE_PER_TRIP + trip.cubicMeters * PRICE_PER_CUBIC_METER;
 
   return (
     <div className="page">
-      <h1>Mis viajes</h1>
-
+        <h1>Mis viajes — {month}/{year}</h1>
       {loading && (
         <p className="empty-text">Cargando viajes…</p>
       )}
@@ -62,6 +63,7 @@ function HistoryTrips() {
         {trips.map((trip) => (
           <div className="trip-card" key={trip._id}>
             <div className="trip-row">
+
               <span className="trip-date">
                 {formatDateTime(trip.createdAt)}
               </span>
@@ -77,10 +79,12 @@ function HistoryTrips() {
               <span className="trip-amount">
                 ${calculateAmount(trip).toLocaleString("es-AR")}
               </span>
+
             </div>
           </div>
         ))}
       </div>
+
     </div>
   );
 }

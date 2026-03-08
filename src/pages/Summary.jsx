@@ -4,9 +4,44 @@ import { useMonth } from "../context/MonthContext";
 import MonthSelector from "../components/MonthSelector";
 import "../styles/summary.css";
 
+
 function Summary() {
+
   const { month, year } = useMonth();
   const [summary, setSummary] = useState(null);
+
+  const downloadMonthlyReport = async () => {
+    try {
+
+      const token = localStorage.getItem("token");
+
+      const res = await fetch(
+        `https://backend-registro-trabajo.onrender.com/exports/monthly?month=${month}&year=${year}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!res.ok) {
+        throw new Error("Error descargando PDF");
+      }
+
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `reporte-${month}-${year}.pdf`;
+      a.click();
+
+      window.URL.revokeObjectURL(url);
+
+    } catch (error) {
+      console.error("Error descargando reporte", error);
+    }
+  };
 
   useEffect(() => {
     fetchSummary();
@@ -14,13 +49,18 @@ function Summary() {
 
   const fetchSummary = async () => {
     try {
+
       const data = await api.get(
         `/summary?month=${month}&year=${year}`
       );
+
       setSummary(data);
+
     } catch (error) {
+
       console.error("Error fetching summary", error);
       setSummary({ empty: true });
+
     }
   };
 
@@ -29,8 +69,14 @@ function Summary() {
 
       {/* HEADER */}
       <div className="summary-header">
-        <h1>Resumen mensual</h1>
+
+        <h1>Resumen </h1>
         <MonthSelector />
+        <button
+          className="download-btn"
+          onClick={downloadMonthlyReport}>
+          📄 Descargar
+        </button>
       </div>
 
       {/* CONTENIDO */}
@@ -46,6 +92,7 @@ function Summary() {
 
           {/* VIAJES */}
           <div className="block">
+
             <div className="head">
               <span>Viajes</span>
               <span>M³</span>
@@ -59,10 +106,12 @@ function Summary() {
                 ${summary.trips.subtotal.toLocaleString()}
               </span>
             </div>
+
           </div>
 
           {/* HORAS */}
           <div className="block">
+
             <div className="head">
               <span>Horas</span>
               <span>Hs extras</span>
@@ -76,10 +125,12 @@ function Summary() {
                 ${summary.hours.subtotal.toLocaleString()}
               </span>
             </div>
+
           </div>
 
           {/* INCENTIVO */}
           <div className="block">
+
             <div className="head">
               <span>Incentivo</span>
               <span>Limpieza</span>
@@ -93,6 +144,7 @@ function Summary() {
                 ${summary.incentive.toLocaleString()}
               </span>
             </div>
+
           </div>
 
           {/* TOTAL */}

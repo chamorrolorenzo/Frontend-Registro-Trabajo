@@ -45,11 +45,17 @@ function Trips() {
   return (
     <div className="page">
 
-       <div className="empresa-banner">
-        <img
-          src="https://i.imgur.com/im56cvZ.jpeg"
-          alt="Val Jaime"
-        />
+    {/*
+<div className="empresa-banner">
+  <img
+    src="https://i.imgur.com/im56cvZ.jpeg"
+    alt="Val Jaime"
+  />
+</div>
+*/}
+
+      <div className="logo">
+        <img src="https://vialjaime.com.ar/wp-content/uploads/2023/10/Vial-Jaime-logo.png" alt="Vial Jaime" />
       </div>
 
       <h1>Agregar viaje</h1>

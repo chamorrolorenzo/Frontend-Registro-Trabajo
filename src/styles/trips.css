@@ -85,8 +85,15 @@
   object-position: center 40%;
 }
 
+.logo img{
+  height:100px;
+  margin:20px auto;
+  display:block;
+}
+
 @media (max-width: 600px) {
   .empresa-banner {
     height: 120px;
   }
 }
+
