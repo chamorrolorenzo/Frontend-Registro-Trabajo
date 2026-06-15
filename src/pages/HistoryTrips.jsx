@@ -3,8 +3,8 @@ import api from "../api/api";
 import { useMonth } from "../context/MonthContext";
 import "../styles/HistoryTrips.css";
 
-const PRICE_PER_TRIP = 8000;
-const PRICE_PER_CUBIC_METER = 800;
+const PRICE_PER_TRIP = 9500;
+const PRICE_PER_CUBIC_METER = 950;
 
 const formatDateTime = (iso) =>
   new Date(iso).toLocaleString("es-AR", {
